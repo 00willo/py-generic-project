@@ -114,7 +114,10 @@ def dump_context(context, filename):
     with io.open(filename, 'w', encoding='ascii') as handle:
         data = json.dumps(context, indent=4, sort_keys=True, ensure_ascii=True)
         data = '\n'.join([i.rstrip() for i in data.splitlines()])
-        handle.write(data + '\n')
+        if sys.version_info < (3,):
+            handle.write(data + '\n'.decode('ascii'))
+        else:
+            handle.write(data + '\n')
 
 
 def prune_empty_files():
