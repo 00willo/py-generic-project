@@ -28,6 +28,7 @@
     SOFTWARE.
 """
 import io
+from builtins import str
 import os
 import sys
 import json
@@ -98,7 +99,7 @@ def replace_marker(filepath, marker, lines):
     for idx, line in enumerate(source_lines):
         if line.rstrip().endswith(marker):
             line = line.rstrip().replace(marker, '')
-            source_lines[idx] = '\n'.join((line + i).rstrip() for i in lines) + '\n'
+            source_lines[idx] = u'\n'.join((line + i).rstrip() for i in lines) + '\n'
             changed = True
 
     if changed:
@@ -113,11 +114,8 @@ def dump_context(context, filename):
     """Dump JSON context to given file."""
     with io.open(filename, 'w', encoding='ascii') as handle:
         data = json.dumps(context, indent=4, sort_keys=True, ensure_ascii=True)
-        data = '\n'.join([i.rstrip() for i in data.splitlines()])
-        if sys.version_info < (3,):
-            handle.write(data + '\n'.decode('ascii'))
-        else:
-            handle.write(data + '\n')
+        data = u'\n'.join([i.rstrip() for i in data.splitlines()])
+        handle.write(data + '\n')
 
 
 def prune_empty_files():
